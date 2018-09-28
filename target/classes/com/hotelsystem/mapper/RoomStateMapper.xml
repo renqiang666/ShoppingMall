@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- RenQiang 2018-8-5 -->
+  <!-- 给当前的xml的文件命名，区分sql块，以后会出现多个sql块 -->
+<mapper namespace="com.hotelsystem.dao.IRoomStateDao">
+    <!-- 添加新的房间状态 -->
+  	<insert id="insertRoomState" parameterType="RoomStateBean">
+  		insert into room_state(rs_name) values(#{name});
+  	</insert>
+  	
+  	<!-- 通过id软删除该id对应的房间状态 -->
+  	<update id="deleteRoomState" parameterType="int">
+  		update room_state set flag=1 where rs_id=#{stateId} ;
+  	</update>
+</mapper>

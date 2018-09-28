@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- RenQiang 2018-8-5 -->
+<!-- namespace：引用到IHotelDiscountDao -->
+<mapper namespace="com.hotelsystem.dao.IRoomInfoDao">
+  	
+  	<!-- 通过房间号修改其房间状态 -->
+  	<update id="updateRoomStateById">
+  		update room_info set ri_s_id=#{aimStateId} where ri_id=#{roomId} and flag=0;
+  	</update>
+  	
+  	<!-- 更据房间号查询该房间信息 -->
+  	<select id="findRoomInfoById"  parameterType="int" resultMap="singleRoomInfoMap">
+   		select * from room_info as a join room_state as b on a.ri_s_id=b.rs_id join room_type as c on a.ri_rt_id=c.rt_id where ri_id=#{roomId} and a.flag=0; 
+  	</select>
+  	<resultMap id="singleRoomInfoMap" type="RoomInfoBean">
+  	    <id property="id" column="ri_id"></id>
+  		<result property="floor" column="ri_floor"></result>
+  		<association property="roomState" javaType="RoomStateBean" resultMap="stateMap"/>
+  		<association property="roomType" javaType="RoomTypeBean" resultMap="typeMap"/>
+  	</resultMap>
+  	
+  	<resultMap id="stateMap" type="RoomStateBean">
+  		<id property="id" column="rs_id"></id>
+  		<result property="name" column="rs_name"></result>
+  	</resultMap>
+  	
+  	<resultMap id="typeMap" type="RoomTypeBean">
+  		<id property="id" column="rt_id"></id>
+  		<result property="name" column="rt_name"></result>
+  		<result property="price" column="rt_price"></result>
+  		<result property="img" column="rt_img"></result>
+  		<result property="people" column="rt_people"></result>
+  		<result property="area" column="rt_area"></result>
+  		<result property="bedType" column="rt_bedtype"></result>
+  		<result property="netType" column="rt_nettype"></result>
+  		<result property="window" column="rt_window"></result>
+  		<result property="breakfirst" column="rt_breakfirst"></result>
+  		<result property="noSmoking" column="rt_nosmoking"></result>
+  	</resultMap>
+  	
+  	<!-- 查询所有房间信息并按楼层分类 -->
+  	<select id="findAllRoomInfo" resultMap="singleRoomInfoMap">
+   		select * from room_info as a join room_state as b on a.ri_s_id=b.rs_id join room_type as c on a.ri_rt_id=c.rt_id where a.flag=0 group by ri_floor order by ri_id asc ; 
+  	</select>
+  	
+  	<!-- 查询特定类型可用房间数量 -->
+  	<select id="findAllRoomInfoCountByType" parameterType="int" resultType="int">
+   		select count(*) from room_info where ri_s_id=1 and ri_rt_id=#{typeId} and flag=0; 
+  	</select>
+  	
+  	<!-- 查询特定类型房间所有的房间数量 -->
+  	 <select id="findSpecialRoomInfoCountByType" parameterType="int" resultType="int">
+   		select count(*) from room_info where ri_rt_id=#{typeId} and flag=0; 
+  	</select>
+  	
+  	<!-- 通过房间号删除该房间信息 -->
+  	<update id="deleteRoomInfoById">
+  		update room_info set flag=1 where ri_id=#{roomId};
+  	</update>
+  	
+  	<!-- 添加房间 -->
+  	<insert id="insertRoom" parameterType="RoomInfoBean">
+  		insert into room_info (ri_id,ri_floor,ri_s_id,ri_rt_id) values(#{id},#{floor},#{roomState.id},#{roomType.id});
+  	</insert>	
+  	
+  	<!-- 查询相应类型的房间 -->
+  	<select id="findEmptyRoomByType" parameterType="int" resultMap="singleRoomInfoMap">
+   		select * from room_info as a join room_state as b on a.ri_s_id=b.rs_id join room_type as c on a.ri_rt_id=c.rt_id where ri_s_id=1 and ri_rt_id=#{typeId} and a.flag=0; 
+  	</select>
+  	
+  	<select id="findRoomByType" parameterType="int" resultMap="singleRoomInfoMap">
+   		select * from room_info as a join room_state as b on a.ri_s_id=b.rs_id join room_type as c on a.ri_rt_id=c.rt_id where ri_rt_id=#{type} and a.flag=0
+  	</select>
+  	<select id="roomDisplayAll" parameterType="int" resultMap="singleRoomInfoMap">
+   		select * from room_info as a join room_state as b on a.ri_s_id=b.rs_id join room_type as c on a.ri_rt_id=c.rt_id where a.flag=0
+  	</select>
+  	
+  	
+  	
+</mapper>

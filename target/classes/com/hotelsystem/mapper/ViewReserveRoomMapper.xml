@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.hotelsystem.dao.IViewReserveRoomDao">
+
+ 	<select id="findAllReserveMessage"  resultMap="map">
+ 		select * from vi_reserveroom
+ 	</select>
+ 	<resultMap type="ViewReserveRoomBean" id="map">
+ 		<id property="id" column="rr_id"></id>
+  		<result property="checkIn" column="rr_in"></result>
+  		<result property="checkOut" column="rr_out"></result>
+  		<result property="arrive" column="rr_arrive"></result>
+  		<result property="cancel" column="rr_cancel"></result>
+  		<result property="money" column="rr_money"></result>
+  		<result property="state" column="rr_state"></result>
+  		<result property="reservePeopleId" column="rp_id"></result>
+  		<result property="reservePeopleName" column="rp_name"></result>
+  		<result property="tel" column="rp_tel"></result>
+  		<result property="context" column="rp_msg"></result>
+  		<result property="reserveNumberId" column="rn_id"/>
+  		<result property="roomCount" column="rn_count"></result>
+  		<result property="roomTypeId" column="rt_id"/>
+  		<result property="roomType" column="rt_name"></result>
+  		<result property="price" column="rt_price"></result>
+  		<result property="checkInPersonId" column="cp_id"/>
+  		<result property="checkInPeople" column="cp_name"></result>
+ 	</resultMap>
+ 	
+ 	<select id="findByName" parameterType="String" resultMap="map">
+ 		select * from vi_reserveroom where rp_name like #{reservePeopleName}
+ 	</select>
+ 	
+ 	<select id="findById" parameterType="String" resultMap="map">
+ 		select * from vi_reserveroom where rr_id=#{id}
+ 	</select>
+ 	
+ 	<select id="findByTel" parameterType="String" resultMap="map">
+ 		select * from vi_reserveroom where rp_tel=#{rp_tel}
+ 	</select>
+
+ </mapper>

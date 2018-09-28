@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.hotelsystem.dao.ICheckInPersonDao">
+ 
+ 	<select id="findCheckInPersonByRoomId" parameterType="String" resultMap="map">
+ 		select * from checkin_person where cp_rr_id=#{reserveRoom.id} and flag=0
+ 	</select>
+ 	<resultMap type="CheckInPersonBean" id="map">
+ 		<id property="id" column="cp_id"/>
+  		<result property="name" column="cp_name"/>
+ 	</resultMap>
+ 	
+ 	<insert id="insertCheckInPerson" parameterType="CheckInPersonBean"  keyProperty="id" useGeneratedKeys="true">
+ 		insert into checkin_person(cp_name,cp_rr_id) values (#{name},#{reserveRoom.id})
+ 	</insert>
+ 	<update id="updateCheckInPerson" parameterType="CheckInPersonBean" >
+ 		update checkin_person set cp_name=#{name} where cp_id=#{id}
+ 	</update>
+ 	<update id = "updateCheckInPersonByRoomId" parameterType = "CheckInPersonBean">
+ 		update checkin_person set cp_name=#{name} where cp_rr_id=#{reserveRoom.id}
+ 	</update>
+ 	<update id="deleteCheckInPerson" parameterType="int">
+ 		update checkin_person set flag=1 where cp_id=#{id}
+ 	</update>
+ 	<update id="deleteCheckInPersonByRoomId" parameterType="String">
+ 		update checkin_person set flag=1 where cp_rr_id=#{id}
+ 	</update>
+ 	<select id="findById" resultMap="map" parameterType="int">
+ 		select * from checkin_person where cp_id=#{id} and flag=0
+ 	</select>
+ </mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 给当前的xml的文件命名，区分sql块，以后会出现多个sql块 -->
+<mapper namespace="com.hotelsystem.dao.ICommentDao">
+  <!-- 查看全部评论 -->
+  <select id="findAllComment" resultMap="comment">
+    select * from user_comment where flag = 0
+  </select>
+  <!-- 结果映射 -->
+  <resultMap type="com.hotelsystem.bean.CommentBean" id="comment">
+  	<id property="id" column="uc_id"></id>
+  	<result property="date" column="uc_time"></result>
+  	<result property="content" column="uc_content"></result>
+  	<association property="userLogin" column="uc_name" javaType="com.hotelsystem.bean.UserLoginBean" select="com.hotelsystem.bean.findUserLogin"></association>
+  </resultMap>
+  
+  <!-- 删除评论 -->
+  <update id="deleteComment" parameterType="com.hotelsystem.bean.CommentBean" >
+  	update user_comment set flag = 1 where uc_id = #{id};
+  </update>
+      <!-- 添加评论 -->
+  <insert id="insertComment" parameterType="CommentBean">
+    insert into 
+    	user_comment (uc_time, uc_content, uc_name) 
+    		   values(#{date}, #{content}, 
+				(SELECT ul_id from user_login WHERE ul_account=#{userLogin.account}));
+  </insert>
+  
+</mapper>

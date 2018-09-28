@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 给当前的xml的文件命名，区分sql块，以后会出现多个sql块 -->
+<mapper namespace="com.hotelsystem.bean">
+  <!-- 根据id找一个用户的信息 -->
+  <select id="findUserById" resultMap="userInfo" >
+    select * from user_info;
+  </select>
+  
+  <resultMap type="com.hotelsystem.bean.UserInfoBean" id="userInfo">
+  	<id property="id" column="ui_id"></id>
+  	<result property="tel" column="ul_account"></result>
+  	<result property="pass" column="ul_pass"></result>
+  </resultMap>
+
+</mapper>

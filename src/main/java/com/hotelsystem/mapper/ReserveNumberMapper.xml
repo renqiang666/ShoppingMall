@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.hotelsystem.dao.IReserveNumberDao">
+ 
+ 	<select id="findReserveNumberByRoomId" parameterType="String" resultMap="map">
+ 		select * from reserve_number where rn_rr_id=#{id} and flag=0
+ 	</select>
+ 	<resultMap type="ReserveNumberBean" id="map">
+ 	<id property="id" column="rn_id"/>
+  	<result property="count" column="rn_count"/>
+  	<association property="roomType" column="rn_rt_id" 
+  		javaType="RoomTypeBean" 
+  		select="com.hotelsystem.dao.IRoomTypeDao.findRoomTypeById"></association>
+  	<association property="reserveRoom" column="rn_rr_id"
+  		javaType="ReserveRoomBean" 
+  		select="com.hotelsystem.dao.IReserveRoomDao.findReserveRoomByRoomId"></association>
+ 	</resultMap>
+ 	
+ 	<insert id="insertReserveNumber" parameterType="ReserveNumberBean">
+ 		insert into reserve_number(rn_count,rn_rt_id,rn_rr_id) values (#{count},#{roomType.id},#{reserveRoom.id})
+ 	</insert>
+ 	<update id="updateReserveNumber" parameterType="ReserveNumberBean">
+ 		update reserve_number 
+ 		<set> 
+ 			<if test="count != 0">rn_count=#{count},</if>
+ 			<if test="roomType!=null">rn_rt_id=#{roomType.id}</if>
+ 		</set> 
+ 		where rn_id=#{id} and flag=0;
+ 	</update>
+ 	<update id="deleteReserveNumber" parameterType="int">
+ 		update reserve_number set flag=1 where rn_id=#{id}
+ 	</update>
+ 	<update id="deleteReserveNumberByRoomId" parameterType="String">
+ 		update reserve_number set flag=1 where rn_rr_id=#{roomId}
+ 	</update>
+ 	<select id="findById" parameterType="int" resultMap="map">
+ 		select * from reserve_number where flag=0 and rn_id=#{id}
+ 	</select>
+ 	
+ 	<select id="findReserveNumberById" parameterType="String" resultMap="map">
+ 		select * from reserve_number where rn_rr_id=#{reserveRoomId} and flag=0
+ 	</select>
+ 	
+ 	<!--查询相应房间类型预定数量  -->
+ 	<select id="hasOrderCount" parameterType="int" resultType="int">
+ 		select COALESCE(sum(rn_count),0) from reserve_number where rn_rt_id=#{type} and flag=0;
+ 	</select>
+ 	
+ </mapper>

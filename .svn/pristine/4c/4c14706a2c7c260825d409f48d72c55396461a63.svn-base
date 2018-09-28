@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	
+	<settings>
+	    <!-- 配置log4j日志信息 -->
+		<setting name="logImpl" value="LOG4J"></setting>
+	</settings>
+	
+	<!-- 设置别名 -->
+	<typeAliases>
+		<!-- <typeAlias alias="UserBean" type="com.project.bean.UserBean"/> -->
+		<package name="com.hotelsystem.bean"/>
+	</typeAliases>
+	<!-- default:默认选择哪个环境 -->
+  <environments default="development">
+    <environment id="development">
+    	<!-- 事务管理器：默认使用jdbc的事务来提交 -->
+      <transactionManager type="JDBC"/>
+      <!-- 数据源：包含连接数据库的基本信息  POOLED： -->
+      <dataSource type="POOLED">
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/hotelsystem"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers>
+    <mapper resource="com/hotelsystem/mapper/HotelDiscountMapper.xml"></mapper>	
+    <mapper resource="com/hotelsystem/mapper/HotelOverTimeMapper.xml"></mapper>
+    <mapper resource="com/hotelsystem/mapper/RoomInfoMapper.xml"></mapper>
+    <mapper resource="com/hotelsystem/mapper/RoomStateMapper.xml"></mapper>
+    <mapper resource="com/hotelsystem/mapper/RoomTypeMapper.xml"></mapper>
+  <mapper resource="com/hotelsystem/mapper/ViewReserveRoomMapper.xml"></mapper>
+   <mapper resource="com/hotelsystem/mapper/ReservePeopleMapper.xml"></mapper>
+  <mapper resource="com/hotelsystem/mapper/ReserveNumberMapper.xml"></mapper>
+   <mapper resource="com/hotelsystem/mapper/ReserveRoomMapper.xml"></mapper>
+    <mapper resource="com/hotelsystem/mapper/CheckInPersonMapper.xml"></mapper>
+ 
+ 
+  </mappers>
+  
+  
+  
+  
+  
+  
+</configuration>

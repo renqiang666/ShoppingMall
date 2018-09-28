@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotelsystem.dao.ICheckInDao">
+	<select id="findById" parameterType="String" resultMap="checkInMap">
+		select * from checkin_roominfo_type_state where ci_id=#{ci_id}
+	</select>
+	<select id="findExitCheckIn" resultType="com.hotelsystem.bean.CheckInBean">
+		select * from checkin_roominfo_type_state where cflag=1 and iflag=1 and
+		sflag=1 and tflag=1
+	</select>
+	<select id="findAllCheckIn" resultMap="checkInMap">
+		select * from checkin_roominfo_type_state where cflag=0 and iflag=0 and sflag=0 and tflag=0 ORDER BY ci_arrive DESC
+	</select>
+	<select id="findCheckInByRid" parameterType="Integer" resultMap="checkInMap">
+		select * from checkin_roominfo_type_state where ci_rid=#{id} and cflag=0 and iflag=0 and sflag=0 and tflag=0
+	</select>
+	<select id="findAllRoomId" resultType="Integer">
+	select ri_id from room_info where flag = 0
+	</select>
+	<insert id="insertCheckIn" parameterType="CheckInBean">
+		insert into
+		checkin(ci_id,ci_rid,ci_arrive,ci_leave,ci_day,ci_pledge,ci_account)
+		values(#{id},#{room.id},#{arriveTime},#{leaveTime},#{stayDays},#{pledgeMoney},#{paidMoney})
+	</insert>
+	<update id="updateCheckIn" parameterType="CheckInBean">
+		update checkin set
+		ci_account = ci_account+#{3},ci_leave=#{2},ci_day=ci_day+#{1} where ci_rid = #{0} and flag=0
+	</update>
+	<update id="deleteCheckIn" parameterType="String">
+	update checkin SET flag=1 where ci_id=#{ci_id}; 
+	</update>
+	<select id="findCheckInCountByTypeName" parameterType="ViewReserveRoomBean" resultType="int">
+		select  count(*)  from checkin_roominfo_type_state where rt_id = #{roomTypeId} and ri_s_id=3 and ci_id not in (select ci_id from checkin_roominfo_type_state where ci_arrive &gt;= #{checkOut} or ci_leave &lt;= #{checkIn})	
+	</select>
+	
+	<resultMap id="checkInMap" type="CheckInBean">
+		<id property="id" column="ci_id"></id>
+		<result property="arriveTime" column="ci_arrive"></result>
+		<result property="leaveTime" column="ci_leave"></result>
+		<result property="stayDays" column="ci_day"></result>
+		<result property="pledgeMoney" column="ci_pledge"></result>
+		<result property="paidMoney" column="ci_account"></result>
+		<association property="room" javaType="com.hotelsystem.bean.RoomInfoBean">
+			<id property="id" column="ri_id"></id>
+			<result property="floor" column="ri_floor"></result>
+			<association property="roomState" javaType="RoomStateBean"
+				resultMap="stateMap" />
+			<association property="roomType" javaType="RoomTypeBean"
+				resultMap="typeMap" />
+		</association>
+	</resultMap>
+	<resultMap id="stateMap" type="RoomStateBean">
+		<id property="id" column="rs_id"></id>
+		<result property="name" column="rs_name"></result>
+	</resultMap>
+	<resultMap id="typeMap" type="RoomTypeBean">
+		<id property="id" column="rt_id"></id>
+		<result property="name" column="rt_name"></result>
+		<result property="price" column="rt_price"></result>
+		<result property="img" column="rt_img"></result>
+		<result property="people" column="rt_people"></result>
+		<result property="area" column="rt_area"></result>
+		<result property="bedType" column="rt_bedtype"></result>
+		<result property="netType" column="rt_nettype"></result>
+		<result property="window" column="rt_window"></result>
+		<result property="breakfirst" column="rt_breakfirst"></result>
+		<result property="noSmoking" column="rt_nosmoking"></result>
+	</resultMap>
+
+</mapper>

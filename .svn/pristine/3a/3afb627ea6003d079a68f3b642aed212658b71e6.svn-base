@@ -1,0 +1,121 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="/HotelManagement/admin/js/public/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+function updateRoomState(){
+	var room=$('#roomid').val();
+	var aim=$('#state').val();
+	if(aim=="可入住"){
+		aim=1;
+	}else if(aim=="待打扫"){
+		aim=2;
+	}else if(aim=="已入住"){
+		aim=3;
+	}	
+	if(room==""||aim==""){
+		$("#mes2").html("不能有空值！")
+	}else{
+		$("#mes2").html("")
+		$.ajax({
+			url:"/HotelManagement/updateRoomStateById.action",
+			method:"post",
+			async:true,
+			data:"roomId="+$('#roomid').val()+'&aimStateId='+aim,
+			success:function(data){
+				alert(data);
+				window.location.href="/HotelManagement/admin/roominforight.jsp";
+			}
+		});
+	}
+	
+}
+//验证房间号是否合法
+function roomIdentity(){
+	var value=$("#roomid").val();
+	//如果房间号是字符串，非法
+	if(value.length!=4){
+		$("#mes1").html("数据位数非法！");
+		$('#commit').attr("disabled",true);
+		$('#commit').css("background-color","#7f7f7f");
+	}
+	else if(valueIdentity(value,value.length)==0){
+		$("#mes1").html("数据非法！");
+		$('#commit').attr("disabled",true);
+		$('#commit').css("background-color","#7f7f7f");
+	}else{
+		$.ajax({
+			url:"/HotelManagement/findRoomByRoomId.action",
+			method:"post",
+			async:true,
+			data:"roomId="+$('#roomid').val(),
+			success:function(data){
+				if(data=="无该房间"){
+					$("#mes1").html("无该房间，不能修改！");
+					$('#commit').attr("disabled",true);
+					$('#commit').css("background-color","#7f7f7f");
+				}else{
+					$("#mes1").html("");
+					$('#commit').attr("disabled",false);
+					$('#commit').css("background-color","orange");
+				}
+			}
+		});
+	}	
+}
+//验证是否为数字
+function valueIdentity(value,length){
+	for(var i=0;i<length;i++){
+		var tempValue=value.substr(i,1);
+		if(!(tempValue>=0&&tempValue<=9)){
+		    return 0;
+		}
+	}
+	return 1;
+}
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li>首页</li>
+    <li>管理信息</li>
+    <li>房间设置</li>
+    <li>修改房间状态</li>
+    </ul>
+    </div>
+    
+    <div class="formbody">
+    
+    <div class="formtitle"><span>基本信息</span></div>
+    
+    <ul class="forminfo">
+    <li style="float:left;"><label>更新房间号</label><input name="" type="text" class="dfinput" id="roomid" onblur="roomIdentity()"/><i>请输入4位数字房间号</i></li><div id="mes1" style="width:200px;height:32px;line-height:32px;color:red;float:left;margin-left:50px;"></div>
+    <li style="float:left;"><label>目标房间状态</label><select style="border:1px black solid;width:100px;" id="state">
+      <option>可入住</option>
+      <option>待打扫</option>
+      <option>已入住</option>
+    </select></li>
+    <li style="float:left;"><label>&nbsp;</label><input id="commit" type="button" class="rqbtn" value="确认更新" onclick="updateRoomState()"/></li><div id="mes2" style="width:200px;height:32px;line-height:32px;color:red;float:left;margin-left:50px;"></div>
+    </ul>
+    
+    
+    </div>
+
+
+</body>
+</html>

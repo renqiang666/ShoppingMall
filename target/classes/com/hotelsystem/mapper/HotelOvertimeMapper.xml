@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- RenQiang 2018-8-5 -->
+<!-- namespace：引用到IHotelOverTimeDao -->
+<mapper namespace="com.hotelsystem.dao.IHotelOverTimeDao">
+  	
+  	<!-- 查询超时收费规则 -->
+  	<select id="findHotelOverTimeRule" resultMap="overTimeMap">
+   		select * from hotel_overtime where flag=0; 
+  	</select>
+  	<resultMap id="overTimeMap" type="HotelOverTimeBean">
+  	    <id property="id" column="o_id"></id>
+  		<result property="overHalfDayStartTime" column="o_etime1" jdbcType="TIMESTAMP"></result>
+  		<result property="overAllDayStartTime" column="o_etime2" jdbcType="TIMESTAMP"></result>
+  	</resultMap>
+  	
+  	<!-- 修改退房时间规定 -->
+  	<update id="updateOverTimeRule" parameterType="Date">
+  		update hotel_overtime
+  		<set>
+  		  <if test="overHalfDayStartTime!=null">
+  		     o_etime1=#{overHalfDayStartTime},
+  		  </if>
+  		  <if test="overAllDayStartTime!=null">
+  		     o_etime2=#{overAllDayStartTime},
+  		  </if>
+  		</set>
+  		where o_id=1
+  		;
+  	</update>
+  	
+  	  	
+</mapper>

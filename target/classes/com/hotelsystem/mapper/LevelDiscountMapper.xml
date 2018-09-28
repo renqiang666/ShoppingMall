@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 给当前的xml的文件命名，区分sql块，以后会出现多个sql块 -->
+<mapper namespace="com.hotelsystem.dao.ILevelDiscountDao">
+
+<insert id="addLevelDiscount" parameterType="LevelDiscountBean"  keyProperty="classId" useGeneratedKeys="true">
+	INSERT INTO level_discount(c_name,c_discount,c_consume)VALUES(#{className},#{classDiscount},#{classConsume})
+</insert>
+<update id="updateLevelDiscount" parameterType="LevelDiscountBean">
+	UPDATE level_discount 
+	<set>
+		<if test="classDiscount !=null and classDiscount != ''">
+		c_discount=#{classDiscount},
+		</if>
+		<if test="classConsume != null and classConsume != ''">
+		c_consume=#{classConsume}
+		</if>
+	</set>
+	WHERE c_id=#{classId};
+</update>
+<update id="delLevelDiscount" parameterType="int">
+	UPDATE level_discount SET flag=1 WHERE c_id=#{classId}
+</update>
+<select id="checkLevelDiscount" resultMap="discountMap">
+	SELECT * FROM level_discount where flag=0;
+</select>
+<resultMap type="LevelDiscountBean" id="discountMap">
+		<id column="c_id" property="classId" />
+		<result column="c_name" property="className"/>
+		<result column="c_discount" property="classDiscount" />
+		<result column="c_consume" property="classConsume"/>
+	</resultMap>
+<select id="checkIdByLevelDiscount" parameterType="int" resultMap="discountMap2">
+	SELECT * FROM level_discount where c_id=#{id} and flag=0;
+</select>
+<resultMap type="LevelDiscountBean" id="discountMap2">
+		<id column="c_id" property="classId" />
+		<result column="c_name" property="className"/>
+		<result column="c_discount" property="classDiscount" />
+		<result column="c_consume" property="classConsume"/>
+	</resultMap>
+</mapper>

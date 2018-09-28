@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- RenQiang 2018-8-5 修改了namespace，从bean改为dao -->
+  <!-- 给当前的xml的文件命名，区分sql块，以后会出现多个sql块 -->
+<mapper namespace="com.hotelsystem.dao.IRoomTypeDao">
+  <!-- 根据评论找当前登陆的用户 -->
+  <select id="findRoomType" resultMap="allRoomType" >
+    select * from room_type where flag=0;
+  </select>
+  <resultMap type="com.hotelsystem.bean.RoomTypeBean" id="allRoomType">
+  	<id property="id" column="rt_id"></id>
+  	<result property="name" column="rt_name"></result>
+  	<result property="price" column="rt_price"></result>
+  	<result property="img" column="rt_img"></result>
+  	<result property="people" column="rt_people"></result>
+  	<result property="area" column="rt_area"></result>
+  	<result property="bedType" column="rt_bedtype"></result>
+  	<result property="netType" column="rt_nettype"></result>
+  	<result property="window" column="rt_window"></result>
+  	<result property="breakfirst" column="rt_breakfirst"></result>
+  	<result property="noSmoking" column="rt_nosmoking"></result>
+  </resultMap>
+
+    <!-- 通过类型id更新类型信息 -->
+  	<update id="updateRoomTypeById">
+  		update room_type 
+  		<set>
+  		  <if test="bean.price!=null">
+  		     rt_price=#{bean.price},
+  		  </if>
+  		  <if test="bean.img!=null">
+  		     rt_img=#{bean.img},
+  		  </if>
+  		  <if test="bean.area!=null">
+  		     rt_area=#{bean.area},
+  		  </if>
+  		  <if test="bean.bedType!=null">
+  		     rt_bedtype=#{bean.bedType},
+  		  </if>
+  		  <if test="bean.netType!=null">
+  		     rt_nettype=#{bean.netType},
+  		  </if>
+  		  <if test="bean.window!=null">
+  		     rt_window=#{bean.window},
+  		  </if>
+  		   <if test="bean.breakfirst!=null">
+  		     rt_breakfirst=#{bean.breakfirst},
+  		   </if>
+  		   <if test="bean.noSmoking!=null">
+  		     rt_nosmoking=#{bean.nosmoking},
+  		   </if>
+  		</set>
+  		where rt_id=#{typeId}
+  		;
+  	</update>
+  	
+    <!-- 通过id软删除该id对应的房间类型 -->
+  	<update id="deleteRoomType" parameterType="int">
+  		update room_type set flag=1 where rt_id=#{typeId} ;
+  	</update>
+  	
+  	<!-- 根据房间类型名查询该类型ID -->
+  	<select id="findRoomTypeIdByTypeName"  parameterType="String" resultType="int">
+   		select rt_id from room_type where rt_name=#{typeName} and flag=0; 
+  	</select>
+  	
+  	<!-- 根据房间类型名查询该类型房间单价 -->
+  	<select id="findRoomPriceByTypeName"  parameterType="String" resultType="int">
+   		select rt_price from room_type where rt_name=#{typeName} and flag=0; 
+  	</select>
+  	
+  	<!-- 根据房间类型ID查询该房间类型的详情 -->
+  	<select id="findRoomTypeById"  parameterType="int" resultMap="allRoomType">
+   		select * from room_type where rt_id=#{roomTypeId} and flag=0; 
+  	</select>
+  	
+  	<!-- 根据查询所有房间类型的详情 -->
+  	<select id="findRoomTypeDetailInfo" resultType="Integer">
+      select ifnull(num,0) from roomtypeinfo where rt_name=#{typeName} and rs_name=#{stateName} ;
+    </select>
+</mapper>

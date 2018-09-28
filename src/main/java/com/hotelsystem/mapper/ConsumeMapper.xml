@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotelsystem.dao.IConsumeDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.hotelsystem.bean.ConsumeBean">
+        <result column="c_id" property="conId" jdbcType="VARCHAR"/>
+        <result column="c_ci_id" property="conCheckId" jdbcType="VARCHAR"/>
+        <result column="c_name" property="conName" jdbcType="VARCHAR"/>
+        <result column="c_qty" property="conMount" jdbcType="INTEGER"/>
+        <result column="c_extra" property="conMoney" jdbcType="DOUBLE"/>
+        <result column="c_date" property="conDate" jdbcType="TIMESTAMP"/>
+        <result column="flag" property="conFlag" jdbcType="INTEGER"/>
+        <result column="c_alipay_id" property="conAlipayId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        c_id,
+        c_ci_id,
+        c_name,
+        c_qty,
+        c_extra,
+        c_date,
+        flag,
+c_alipay_id
+</sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" >
+        INSERT INTO consume (
+            c_id,
+            c_ci_id,
+            c_name,
+            c_qty,
+            c_extra,
+            c_date,
+            flag,
+            c_alipay_id
+        ) VALUES (
+            #{consumeBean.conId,jdbcType=VARCHAR},
+            #{consumeBean.conCheckId,jdbcType=VARCHAR},
+            #{consumeBean.conName,jdbcType=VARCHAR},
+            #{consumeBean.conMount,jdbcType=INTEGER},
+            #{consumeBean.conMoney,jdbcType=DOUBLE},
+            #{consumeBean.conDate,jdbcType=TIMESTAMP},
+            #{consumeBean.conFlag,jdbcType=INTEGER},
+            #{consumeBean.conAlipayId,jdbcType=VARCHAR}
+        )
+</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="consumeBean.conId">
+        INSERT INTO consume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="consumeBean.conId!=null">c_id,</if>
+            <if test="consumeBean.conCheckId!=null">c_ci_id,</if>
+            <if test="consumeBean.conName!=null">c_name,</if>
+            <if test="consumeBean.conMount!=null">c_qty,</if>
+            <if test="consumeBean.conMoney!=null">c_extra,</if>
+            <if test="consumeBean.conDate!=null">c_date,</if>
+            <if test="consumeBean.conFlag!=null">flag,</if>
+            <if test="consumeBean.conAlipayId!=null">c_alipay_id</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="consumeBean.conId!=null">#{consumeBean.conId,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conCheckId!=null">#{consumeBean.conCheckId,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conName!=null">#{consumeBean.conName,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conMount!=null">#{consumeBean.conMount,jdbcType=INTEGER},</if>
+            <if test="consumeBean.conMoney!=null">#{consumeBean.conMoney,jdbcType=DOUBLE},</if>
+            <if test="consumeBean.conDate!=null">#{consumeBean.conDate,jdbcType=TIMESTAMP},</if>
+            <if test="consumeBean.conFlag!=null">#{consumeBean.conFlag,jdbcType=INTEGER},</if>
+            <if test="consumeBean.conAlipayId!=null">#{consumeBean.conAlipayId,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">INSERT INTO consume(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="consumeBeans" item="consumeBean" index="index" separator=",">
+            (
+            #{consumeBean.conId,jdbcType=VARCHAR},
+            #{consumeBean.conCheckId,jdbcType=VARCHAR},
+            #{consumeBean.conName,jdbcType=VARCHAR},
+            #{consumeBean.conMount,jdbcType=INTEGER},
+            #{consumeBean.conMoney,jdbcType=DOUBLE},
+            #{consumeBean.conDate,jdbcType=TIMESTAMP},
+            #{consumeBean.conFlag,jdbcType=INTEGER},
+            #{consumeBean.conAlipayId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE consume
+        <set>
+            <if test="consumeBean.conId != null">c_id = #{consumeBean.conId,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conCheckId != null">c_ci_id = #{consumeBean.conCheckId,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conName != null">c_name = #{consumeBean.conName,jdbcType=VARCHAR},</if>
+            <if test="consumeBean.conMount != null">c_qty = #{consumeBean.conMount,jdbcType=INTEGER},</if>
+            <if test="consumeBean.conMoney != null">c_extra = #{consumeBean.conMoney,jdbcType=DOUBLE},</if>
+            <if test="consumeBean.conDate != null">c_date = #{consumeBean.conDate,jdbcType=TIMESTAMP},</if>
+            <if test="consumeBean.conFlag != null">flag = #{consumeBean.conFlag,jdbcType=INTEGER},</if>
+            <if test="consumeBean.conAlipayId != null">c_alipay_id = #{consumeBean.conAlipayId,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE c_id = #{consumeBean.conId,jdbcType=VARCHAR}
+    </update>
+
+    <!--auto generated by codehelper on 2018-08-07 15:17:19-->
+    <select id="findByConId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from consume
+        where c_id=#{conId,jdbcType=VARCHAR}
+    </select>
+
+<!--auto generated by codehelper on 2018-08-07 17:23:02-->
+	<update id="updateConFlagByConId">
+	update consume
+	set flag=#{updatedConFlag,jdbcType=INTEGER}
+	where c_id=#{conId,jdbcType=VARCHAR}</update>
+</mapper>
+

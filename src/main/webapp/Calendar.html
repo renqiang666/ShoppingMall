@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+<title>强大的纯JS扁平风格日期时间选择器插件</title>
+<script async>
+	function fp_ready() {
+		// setting custom defaults
+		Flatpickr.l10n.firstDayOfWeek = 1;
+
+		//Regular flatpickr
+		document.getElementById("flatpickr-tryme").flatpickr();
+		document.getElementsByClassName("calendar").flatpickr();
+
+		var calendars = document.getElementsByClassName("flatpickr").flatpickr();
+	}
+</script>
+<script async src="admin/js/public/flatpickr.js" onload="fp_ready()"></script>
+<link rel="stylesheet" id=cal_style type="text/css"	href="admin/js/public/flatpickr.min.css">
+</head>
+<body>
+	<input id="flatpickr-tryme" class="flatpickr" data-date-format="Y-m-d"
+		placeholder="European Format ('d-m-Y')">
+	<br />
+
+	<input class=flatpickr data-enable-time=true data-time_24hr=true
+		placeholder="24 hour time">
+		
+		<br/>
+	<input class=flatpickr data-enable-time=true data-no-calendar=true value="09:00">
+</body>
+</html>

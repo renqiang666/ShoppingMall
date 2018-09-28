@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- spring包扫描功能 -->
+    <context:component-scan base-package="com.hotelsystem.action"/>
+
+    <!-- 配置注解映射处理器 -->
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+    <!-- 配置注解处理器适配器 -->
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="Jackson"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置视图解析器 -->
+    <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    </bean>
+
+    <!-- 注册json解析器 -->
+    <bean id="Jackson"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=utf-8</value>
+                <value>text/html;charset=utf-8</value>
+                <value>text/json;charset=utf-8</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 配置多媒体文件解析器 -->
+ <!--    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        设定默认编码
+        <property name="defaultEncoding" value="UTF-8"></property>
+        设定文件上传的最大值2MB， 2*1024*1024
+        <property name="maxUploadSize" value="2097152"></property>
+        resolveLazily属性启用是为了推迟文件解析，以便在UploadAction 中捕获文件大小异常
+        <property name="resolveLazily" value="true"/>
+    </bean> -->
+
+
+</beans>

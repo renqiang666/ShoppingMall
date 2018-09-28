@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotelsystem.dao.ILoginAndRegisterDao">
+	<!-- 查询密码 -->
+  	<select id="selectPass" parameterType="String" resultType="String">
+  		 select ul_pass as pass from user_login where ul_account=#{account} and flag=0;
+  	</select>
+  	
+  	<!-- 注册，插入 user_login-->
+  	<insert id="insertLogin" parameterType="UserLoginBean" useGeneratedKeys="true" keyProperty="id">
+  		insert into user_login(ul_account,ul_pass) values(#{account},#{pass}); 
+  	</insert>
+  	<!-- 注册，插入 user_info-->
+  	<insert id="insertInfo" parameterType="UserInfoBean">
+  		insert into user_info(ui_name,ui_iden,ui_mail,ui_ul_id) values(#{name},#{iden},#{email},#{ulb.id}); 
+  	</insert>
+  	
+  	<!-- 更新密码 -->
+  	<update id="updatePass">
+  		update user_login SET ul_pass=#{pass} where ul_account=#{account} and flag=0;
+  	</update>
+  	
+ 	<!-- 查询用户信息表 -->
+ 	<select id="selectInfor" parameterType="String" resultType="UserInfoBean">
+  		 select ui_name as name,ui_iden as iden,ui_mail as email 
+  		 FROM user_info join user_login on ui_ul_id=ul_id
+  		 where ul_account=#{account} and flag=0;
+  	</select>
+  	
+ 	<!-- 更新邮箱 -->
+  	<update id="updateInfor">
+  		update user_info SET ui_mail=#{mail} 
+  		where ui_ul_id=(select ul_id from user_login where ul_account=#{account}) and flag=0;
+  	</update>
+  	<!-- 查询用户个人评论 -->
+  	<select id="selectUserBean" parameterType="String" resultType="UserInfoBean">
+  		 select ui_name as name,ui_iden as iden,ui_mail as email
+  		 FROM user_info join user_login on ui_ul_id=ul_id
+  		 where ul_account=#{account} and user_info.flag=0;
+  	</select>
+  	
+  	<!-- 查询是否可以评论 -->
+ 	<select id="userComment" parameterType="String" resultType="int">
+  		 select ui_comment
+  		 FROM user_info join user_login on ui_ul_id=ul_id
+  		 where ul_account=#{account} and user_login.flag=0;
+  	</select>
+  	<!-- 关闭评论 -->
+  	<update id="closeComment" parameterType="String">
+  		update user_info SET ui_comment=0 
+  		where ui_ul_id=(select ul_id from user_login where ul_account=#{account}) and flag=0;
+  	</update>
+  	
+  	<!-- 打开评论 -->
+  	<update id="openComment" parameterType="String">
+  		update user_info SET ui_comment=1 
+  		where ui_ul_id=(select ul_id from user_login where ul_account=#{account}) and flag=0;
+  	</update>
+</mapper>

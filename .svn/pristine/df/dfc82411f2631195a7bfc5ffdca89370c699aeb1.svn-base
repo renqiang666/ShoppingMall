@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.hotelsystem.dao.IReservePeopleDao">
+ 
+ 	<select id="findReservePeopleByPeopleId" parameterType="int" resultMap="reservePeopleMap">
+ 		select * from reserve_people where rp_id=#{id} and flag=0
+ 	</select>
+ 	<resultMap type="ReservePeopleBean" id="reservePeopleMap">
+ 		<id property="id" column="rp_id"/>
+  		<result property="name" column="rp_name"/>
+  		<result property="tel" column="rp_tel"/>
+  		<result property="message" column="rp_msg"/>
+  		<collection property="reserveRoomList" ofType="ReserveRoomBean" resultMap="roomMap"></collection>
+ 	</resultMap>
+ 	<resultMap type="ReserveRoomBean" id="roomMap">
+ 		<id property="id" column="rr_id"/>
+  		<result property="checkIn" column="rr_in"/>
+  		<result property="checkOut" column="rr_out"/>
+  		<result property="arrive" column="rr_arrive"/>
+  		<result property="cancel" column="rr_cancel"/>
+  		<result property="money" column="rr_money"/>
+  		<result property="state" column="rr_state"/>
+ 	</resultMap>
+ 	
+ 	<select id="findReservePeopleByPeopleName" parameterType="String" resultMap="PeopleMapByName">
+ 		select * from reserve_people where rp_name like #{name} and flag=0
+ 	</select>
+ 	<resultMap type="ReservePeopleBean" id="PeopleMapByName">
+ 		<id property="id" column="rp_id"/>
+  		<result property="name" column="rp_name"/>
+  		<result property="tel" column="rp_tel"/>
+  		<result property="message" column="rp_msg"/>
+  	<collection property="reserveRoomList" ofType="ReserveRoomBean" resultMap="roomMapByName"></collection>
+ 	</resultMap>
+ 	<resultMap type="ReserveRoomBean" id="roomMapByName">
+ 		<id property="id" column="rr_id"/>
+  		<result property="checkIn" column="rr_in"/>
+  		<result property="checkOut" column="rr_out"/>
+  		<result property="arrive" column="rr_arrive"/>
+  		<result property="cancel" column="rr_cancel"/>
+  		<result property="money" column="rr_money"/>
+  		<result property="state" column="rr_state"/>
+ 	</resultMap>
+ 	
+ 	<insert id="insertReservePeople" parameterType="ReservePeopleBean" keyProperty="id" useGeneratedKeys="true">
+ 		insert into reserve_people(rp_name,rp_tel,rp_msg) values (#{name},#{tel},#{message})
+ 	</insert>
+ 	<update id="updateReservePeople" parameterType="ReservePeopleBean">
+ 		update reserve_people 
+ 		<set> 
+ 			<if test="tel != null">rp_tel=#{tel},</if>
+ 			<if test="message != null">rp_msg=#{message},</if>
+ 			<if test="name != null">rp_name=#{name}</if>
+ 		</set> 
+ 		where rp_id=#{id} and flag=0;
+ 	</update>
+ 	 <update id="deleteReservePeople" parameterType="ReservePeopleBean">
+ 		update reserve_people set flag=1 where rp_id=#{id}
+ 	</update> 
+ </mapper>
