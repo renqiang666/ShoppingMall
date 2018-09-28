@@ -1,0 +1,20 @@
+function changePass(){
+	$.ajax({
+		url:"ChangePassServlet",
+		type:"post",
+		dataType:"json",
+		data:{
+			account:$("#account").val(),
+			oldPass:$("#oldPass").val(),
+			newPass:$("#newPass").val(),
+			repass:$("#rePass").val(),
+			code:$("#code").val()
+		},
+		success:function(data){
+			$("#mes").html(data);
+			 if(data=="修改密码成功！"){
+		        	window.location.href="JSP/login.jsp";
+		        }
+		}
+	});
+}

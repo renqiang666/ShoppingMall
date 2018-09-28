@@ -1,0 +1,19 @@
+function register(){
+	$.ajax({
+		url:"RegisterServlet",
+		type:"post",
+		dataType:"json",
+		data:{
+			account:$("#account").val(),
+			pass:$("#userpass").val(),
+			repass:$("#repass").val(),
+			code:$("#identitycode").val()
+		},
+		success:function(data){
+			$("#mes").html(data);
+			if(data=="注册成功！"){
+				window.location.href="JSP/login.jsp";
+			}
+		}
+	});
+}
